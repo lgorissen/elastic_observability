@@ -1,0 +1,35 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    app: {{ .Values.name }}
+data:
+  default.json: |
+    {
+        "service": {
+            "port": {{ .Values.deployment.containerPort }},
+            "welcomeMessage": "{{ .Values.service.welcomeMessage }}"
+        },
+        "external": {
+            "nodejs": {
+                "host": "say-hello-nodejs",
+                "port": "8020"
+            },
+            "micronaut": {
+                "host": "say-hello-micronaut",
+                "port": "8021"
+            },
+            "springboot": {
+                "host": "say-hello-springboot",
+                "port": "8022"
+            }
+        },
+        "apm": {
+            "serviceName": "say-hello-elastic",
+            "secretToken": "{{ .Values.apm.secretToken }}",
+            "environment": "{{ .Values.apm.environment }}",
+            "serverUrl": "{{ .Values.apm.serverUrl }}"
+        }        
+    }

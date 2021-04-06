@@ -1,0 +1,23 @@
+name: say-hello-micronaut
+
+deployment:
+
+  replicas: 1
+  image: lgorissen/say-hello-micronaut:0.9.1
+  imagePullPolicy: Always
+  containerPort: 8080
+  welcomeMessage: Welcome on Terra10-micronaut 
+
+service:
+  port: 8021
+
+elastic:
+  apm:
+    serverUrl: [todo: set APM endpoint]
+    applicationPackages: say
+    environment: rubix-am-demo
+    logLevel: INFO
+    secretToken: [todo: set APM Server secret token] 
+
+log:
+  level: info  

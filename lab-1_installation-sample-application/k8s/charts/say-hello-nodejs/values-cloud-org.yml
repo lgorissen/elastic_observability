@@ -1,0 +1,17 @@
+name: say-hello-nodejs
+
+deployment:
+
+  replicas: 1
+  image: lgorissen/say-hello-nodejs:1.1.0
+  imagePullPolicy: IfNotPresent  
+  containerPort: 8090
+
+service:
+   port: 8020
+   welcomeMessage: Welcome on planet Terra10
+
+apm:
+   secretToken: [todo: set APM Server secret token] 
+   environment: rubix-am-demo
+   serverUrl: [todo: set APM endpoint] 

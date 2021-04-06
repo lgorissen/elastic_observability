@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    app: {{ .Values.name }}
+data:
+  application.properties: |
+    server.port={{ .Values.deployment.containerPort }}
+    spring.jpa.hibernate.ddl-auto={{ .Values.service.spring.jpa.hibernate.ddlauto }}
+    spring.datasource.url={{ .Values.service.spring.datasource.url }}
+    spring.datasource.username={{ .Values.service.spring.datasource.username }}
+    spring.datasource.password={{ .Values.service.spring.datasource.password }}
+    say.hello.greeting={{ .Values.service.say.hello.greeting }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-initdb-config
+data:
+  initdb.sql: |
+    create database springboot_elastic;
+    create user 'springbootelastic'@'%' identified by 'welcome01';
+    grant all on springboot_elastic.* to 'springbootelastic'@'%';

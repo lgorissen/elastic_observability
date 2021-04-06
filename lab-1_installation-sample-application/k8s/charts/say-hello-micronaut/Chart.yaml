@@ -1,0 +1,3 @@
+apiVersion: v2
+name: say-hello-micronaut
+version: 0.9.1

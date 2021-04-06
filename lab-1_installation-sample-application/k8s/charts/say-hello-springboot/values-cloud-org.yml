@@ -1,0 +1,29 @@
+name: say-hello-springboot
+
+deployment:
+  replicas: 1
+  image: lgorissen/say-hello-springboot:0.9.0
+  imagePullPolicy: IfNotPresent
+  containerPort: 8080
+
+service:
+  port: 8022
+  say:
+    hello:
+      greeting: Springboot in Kubernetes at
+  spring:
+    jpa:
+      hibernate:
+        ddlauto: update
+    datasource:
+      url: jdbc:mysql://mysql-service:3306/springboot_elastic
+      username: springbootelastic
+      password: welcome01
+
+elastic:
+  apm:
+    serverUrl: [todo: set APM endpoint]
+    applicationPackages: ""
+    environment: rubix-am-demo
+    logLevel: INFO
+    secretToken: [todo: set APM Server secret token] 

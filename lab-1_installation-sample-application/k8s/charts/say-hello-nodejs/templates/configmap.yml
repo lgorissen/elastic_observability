@@ -1,0 +1,21 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    app: {{ .Values.name }}
+data:
+  default.json: |
+    {
+        "service": {
+            "port": {{ .Values.deployment.containerPort }},
+            "welcomeMessage": "{{ .Values.service.welcomeMessage }}"
+        },
+        "apm": {
+            "serviceName": "say-hello-nodejs",
+            "secretToken": "{{ .Values.apm.secretToken }}",
+            "environment": "{{ .Values.apm.environment }}",
+            "serverUrl": "{{ .Values.apm.serverUrl }}"
+        }
+    }

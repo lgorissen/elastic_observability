@@ -1,0 +1,17 @@
+name: say-hello-elastic
+
+deployment:
+
+  replicas: 1
+  image: lgorissen/say-hello-elastic:1.1.0
+  imagePullPolicy: IfNotPresent
+  containerPort: 8091
+  welcomeMessage: Welkom bij elastic
+
+service:
+   port: 8010
+
+apm:
+   secretToken: [todo: set APM Server secret token] 
+   environment: rubix-am-demo
+   serverUrl: [todo: set APM endpoint]   

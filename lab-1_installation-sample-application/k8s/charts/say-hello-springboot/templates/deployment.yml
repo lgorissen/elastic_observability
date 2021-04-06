@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: {{ .Values.name }}
+  name: {{ .Values.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: {{ .Values.name }}
+    spec:
+      #### 1 ## APM instrumentation ###    Shared volume and init container    #########
+      initContainers: 
+      - name: elastic-java-agent 
+        image: docker.elastic.co/observability/apm-agent-java:1.21.0 
+        volumeMounts: 
+        - mountPath: /elastic/apm/agent 
+          name: elastic-apm-agent 
+        command: ['cp', '-v', '/usr/agent/elastic-apm-agent.jar', '/elastic/apm/agent']
+      ##################################################################################
+      containers:
+      - image: {{ .Values.deployment.image }}
+        imagePullPolicy: {{ .Values.deployment.imagePullPolicy }}
+        name: {{ .Values.name }}
+        ports:
+        - containerPort: {{ .Values.deployment.containerPort }}
+        volumeMounts:
+        - name: applicationconfigvolume
+          mountPath: /config
+      #### 2 ## APM instrumentation ###    Volume path and agent config    #############
+        - mountPath: /elastic/apm/agent 
+          name: elastic-apm-agent 
+        env: 
+        - name: ELASTIC_APM_SERVER_URL 
+          value: "{{ .Values.elastic.apm.serverUrl }}" 
+        - name: ELASTIC_APM_SERVICE_NAME 
+          value: "say-hello-springboot" 
+        - name: ELASTIC_APM_APPLICATION_PACKAGES 
+          value: {{ .Values.elastic.apm.applicationPackages }}
+        - name: ELASTIC_APM_ENVIRONMENT 
+          value: {{ .Values.elastic.apm.environment }} 
+        - name: ELASTIC_APM_LOG_LEVEL 
+          value: {{ .Values.elastic.apm.logLevel }}
+        - name: ELASTIC_APM_SECRET_TOKEN 
+          value: {{ .Values.elastic.apm.secretToken }} 
+        - name: JAVA_TOOL_OPTIONS 
+          value: -javaagent:/elastic/apm/agent/elastic-apm-agent.jar
+      ##################################################################################
+      volumes: 
+      #### 3 ## APM instrumentation ######               Volume         ################
+      - name: elastic-apm-agent 
+        emptyDir: {} 
+      ##################################################################################
+      - name: applicationconfigvolume
+        configMap:
+          name: {{ .Values.name }}
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql/mysql-server:5.7
+        imagePullPolicy: {{ .Values.deployment.imagePullPolicy }}
+        ports:
+          - containerPort: 3306
+        volumeMounts:
+          - name: mysql-initdb
+            mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: mysql-initdb
+          configMap:
+            name: mysql-initdb-config

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: {{ .Values.name }}
+  name: {{ .Values.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: {{ .Values.name }}
+    spec:
+      containers:
+      - image: {{ .Values.deployment.image }}
+        imagePullPolicy: {{ .Values.deployment.imagePullPolicy }}
+        name: {{ .Values.name }}
+        ports:
+        - containerPort: {{ .Values.deployment.containerPort }}
+        volumeMounts:
+        - name: applicationconfigvolume
+          mountPath: /usr/src/app/config
+      volumes:
+      - name: applicationconfigvolume
+        configMap:
+          name: {{ .Values.name }}
