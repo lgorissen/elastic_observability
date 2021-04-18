@@ -36,8 +36,8 @@ daemonset:
             matchers:
             - logs_path:
                 logs_path: "/var/log/containers/"
-      cloud.id: "elastic-observability-deployment:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo5MjQzJDc2ZWYwMDY0OTYxYjQ4MDBiOTIyYjdiNTJkNjhiNmI5JDMwZjZjZTM1NDRjZTQwZmZiODM4NmVmNWNmNGQwMThh"
-      cloud.auth: "elastic:3TvU3fbDOooLlm72U88v3ArJ"
+      cloud.id: "[todo: set cloud.id ]"
+      cloud.auth: "[todo: set elastic user/pwd ]"
   # Only used when updateStrategy is set to "RollingUpdate"
   maxUnavailable: 1
   nodeSelector: {}
