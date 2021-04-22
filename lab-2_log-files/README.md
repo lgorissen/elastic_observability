@@ -27,7 +27,7 @@ Now edit the file `values-filebeat-cloud.yml` and make 2 replacements:
 | string | replace with |
 |--------|--------------|
 | [todo: set cloud.id ] | The Cloud ID from lab 0 | 
-| [todo: set elastic user/pwd ] | The elastic user/pwd from lab 0 | 
+| [todo: set elastic user/pwd ] | The elastic user/pwd from lab 0, formatted as "<user>:<password>"  | 
 
 
 Next, the Helm chart can be deployed:
